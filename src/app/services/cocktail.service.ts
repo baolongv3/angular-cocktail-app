@@ -35,23 +35,6 @@ interface CocktailDbResult {
   drinks: Array<CocktailDbDrink>;
 }
 
-interface IngredientNameDbResult {
-  drinks: Array<IngredientDbDrink>
-}
-
-interface IngredientDb {
-  strIngredient : string;
-  strDescription : string ;
-  strType : string;
-}
-
-interface IngredientDbResult {
-  ingredients : Array<IngredientDb>
-}
-
-interface IngredientDbDrink {
-  strIngredient1 : string
-}
 @Injectable({
   providedIn: 'root'
 })
@@ -71,27 +54,9 @@ public listByFirstLetter(name : string) : Observable<Array<Cocktail>> | any{
     )
   }
 
-public getAllIngredient() : Observable<Array<Ingredient>> {
 
-    const url = `${CocktailService.baseUrl}/list.php?i=list`;
-    return this.http.get<IngredientNameDbResult>(url).pipe(
-      map((result) => this.mapResultToIngredientName(result))
-    )
 
-}
 
-public getOneIngredient(name : string | null) : Observable<Ingredient>{
-  const url = `${CocktailService.baseUrl}/search.php?i=${name}`;
-  return this.http.get<IngredientDbResult>(url).pipe(
-    map(result => this.mapResultToIngredients(result)),
-    map((ingredients : Array<Ingredient>) => {
-      if(!ingredients.length){
-        throw new Error(`Ingredient with name: ${name} doesnt exist`);
-      }
-      return ingredients[0];
-    }))
-
-}
 
 public fetchById(id : string | any) : Observable<Cocktail> {
     const url = `${CocktailService.baseUrl}/lookup.php?i=${id}`;
@@ -117,37 +82,7 @@ private mapResultToCocktail(result : CocktailDbResult) : Array<Cocktail> | any{
 
   }
 
-private mapResultToIngredientName(result: IngredientNameDbResult) : Array<Ingredient> | any {
-  const drinks : Array<IngredientDbDrink> = result?.drinks || [];
-  return drinks.map((item : IngredientDbDrink) => this.mapSingleObjToIngredientName(item));
-}
 
-private mapResultToIngredients(result : IngredientDbResult) : Array<Ingredient> | any {
-  const ingredients : Array<IngredientDb> = result?.ingredients || [];
-  return ingredients.map((item : IngredientDb) => this.mapSingleObjToIngredient(item))
-}
-
-private mapSingleObjToIngredientName(ingredient : IngredientDbDrink) : Ingredient | any{
-  if(!ingredient){
-    return;
-  }
-
-  return {
-    name : ingredient.strIngredient1,
-  }
-}
-
-private mapSingleObjToIngredient(ingredient : IngredientDb) : Ingredient | any{
-  if(!ingredient){
-    return;
-  }
-
-  return {
-    name : ingredient.strIngredient,
-    desc : ingredient.strDescription,
-    type : ingredient.strType
-  }
-}
 
 private  mapSingleObjToCocktail(drink : CocktailDbDrink) : Cocktail | any {
     if(!drink){

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ingredient } from '../models/Ingredient';
-import { CocktailService } from '../services/cocktail.service';
+import { IngredientService } from '../services/ingredient.service';
 
 @Component({
   selector: 'app-ingredients-list',
@@ -9,11 +9,11 @@ import { CocktailService } from '../services/cocktail.service';
   styleUrls: ['./ingredients-list.component.css']
 })
 export class IngredientsListComponent implements OnInit {
-  ingredients$ : Observable<Array<Ingredient>> = new Observable<Array<Ingredient>>();
-  constructor(private service : CocktailService) { }
+  ingredients$ : Observable<Array<string>> = new Observable<Array<string>>();
+  constructor(private service : IngredientService) { }
 
   ngOnInit(): void {
-    this.ingredients$ = this.service.getAllIngredient();
+    this.ingredients$ = this.service.getIngredients();
   }
 
 }
