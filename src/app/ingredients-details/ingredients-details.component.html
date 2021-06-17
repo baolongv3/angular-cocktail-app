@@ -1,0 +1,15 @@
+<div class="card flex-row " *ngIf="ingredient as ingredient">
+
+  <section >
+    <div class="card-header">
+      <h3 class="h3">{{ingredient.name}}</h3>
+    </div>
+    <div class="card-block px-2">
+      <h4>Type</h4>
+      <p>{{ingredient.type}}</p>
+      <h4>Description</h4>
+      <p>{{ingredient.desc}}</p>
+
+    </div>
+  </section>
+</div>

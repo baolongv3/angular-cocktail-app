@@ -1,0 +1,15 @@
+<table class="table">
+  <thead>
+    <th>#</th>
+    <th>Name</th>
+    <th>Details</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ingredient of ingredients$ | async; index as i">
+        <td>{{i + 1}}</td>
+        <td>{{ingredient.name}}</td>
+        <td><a [routerLink]="['/ingredients',ingredient.name.split(' ').join('_')]">See more</a></td>
+
+    </tr>
+  </tbody>
+</table>
