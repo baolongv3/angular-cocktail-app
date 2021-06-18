@@ -9,15 +9,27 @@ import { RouterModule, Route } from '@angular/router'
 import {MatButtonModule} from '@angular/material/button';
 import { CocktailListComponent } from './cocktail-list/cocktail-list.component';
 import { CocktailDetailsComponent } from './cocktail-details/cocktail-details.component';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { NotFoundComponent } from './error-page/not-found.component';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { CocktailDetailsResolver } from './cocktail-details.resolver';
 import { IngredientsListComponent } from './ingredients-list/ingredients-list.component';
 import { IngredientsDetailsComponent } from './ingredients-details/ingredients-details.component';
 import { IngredientsDetailResolver } from './ingredients-detail.resolver';
+import { AngularFireModule    } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthGuard } from './guards/auth.guard';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { environment } from 'src/environments/environment';
+
+
+const config  = environment.FIREBASE_AUTH;
+
+
 
 const routes : Route[] = [
   {
@@ -29,6 +41,8 @@ const routes : Route[] = [
     resolve: {
       cocktail : CocktailDetailsResolver
     },
+    canActivate: [AuthGuard]
+    ,
     component: CocktailDetailsComponent
   },
   {
@@ -43,6 +57,11 @@ const routes : Route[] = [
     ,
     component: IngredientsDetailsComponent
   },
+  {
+    path : 'unauthorized',
+    component: UnauthorizedComponent
+  }
+  ,
   {
     path : '',
     pathMatch : 'full',
@@ -63,12 +82,17 @@ const routes : Route[] = [
     NotFoundComponent,
     HeaderComponent,
     FooterComponent,
+    UnauthorizedComponent,
 
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
+    AngularFireModule.initializeApp(config),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,

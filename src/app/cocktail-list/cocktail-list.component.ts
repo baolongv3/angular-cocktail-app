@@ -10,11 +10,15 @@ import { CocktailService } from '../services/cocktail.service';
 })
 export class CocktailListComponent implements OnInit {
   cocktails$ : Observable<Cocktail[]> = new Observable<Cocktail[]>();
+  cocktail : string = ''
   constructor(private service : CocktailService) { }
 
   ngOnInit(): void {
-    this.cocktails$ = this.service.listByFirstLetter('b');
-    console.log(this.cocktails$);
+    this.cocktails$ = this.service.listByName('');
+  }
+
+  onClick(){
+    this.cocktails$ = this.service.listByName(this.cocktail);
   }
 
 }

@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { stringify } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Cocktail } from '../models/Cocktail';
-import { Ingredient } from '../models/Ingredient';
+
 interface CocktailDbDrink {
   idDrink: string;
   strDrink: string;
@@ -44,8 +43,8 @@ export class CocktailService {
 
 constructor(private http: HttpClient) { }
 
-public listByFirstLetter(name : string) : Observable<Array<Cocktail>> | any{
-  const url = `${CocktailService.baseUrl}/search.php?f=${name}`;
+public listByName(name : string) : Observable<Array<Cocktail>> | any{
+  const url = `${CocktailService.baseUrl}/search.php?s=${name ? name.split(' ').join('_') : 'b'}`;
     return this.http.get<CocktailDbResult>(url).pipe(
       map((result : CocktailDbResult) =>
         this.mapResultToCocktail(result)
